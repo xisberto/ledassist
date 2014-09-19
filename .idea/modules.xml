@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../../../../00790186373/xisberto/android/LedAssist/app/app.iml" filepath="$PROJECT_DIR$/../../../../00790186373/xisberto/android/LedAssist/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LedAssist.iml" filepath="$PROJECT_DIR$/LedAssist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
