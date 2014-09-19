@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/../../../../00790186373/xisberto/android/LedAssist" />
+            <option value="$PROJECT_DIR$/../../../../00790186373/xisberto/android/LedAssist/app" />
           </set>
         </option>
       </GradleProjectSettings>
