@@ -9,12 +9,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener, RadialTimePickerDialog.OnTimeSetListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener,
+        RadialTimePickerDialog.OnTimeSetListener, CompoundButton.OnCheckedChangeListener {
+
     private static final String KEY = "key", TARGET = "target", TAG_RADIAL_PICKER = "radial_picker";
 
     private CheckBox checkLed;
@@ -53,6 +57,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        checkLed.setOnCheckedChangeListener(null);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -61,6 +71,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (dialog != null) {
             dialog.setOnTimeSetListener(this);
         }
+
+        checkLed.setChecked(Settings.isActive(this));
+        checkLed.setOnCheckedChangeListener(this);
+
+        TextView textStatus = (TextView) findViewById(R.id.textStatus);
+        String status = getString(Settings.isLedEnabled(this) ? R.string.enabled : R.string.disabled);
+        textStatus.setText(getString(R.string.current_led_status, status));
     }
 
     @Override
@@ -111,5 +128,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         Button button = (Button) findViewById(mTargetButton);
         Settings.setTime(this, mPreferencesKey, hourOfDay, minute);
         button.setText(Settings.getTimeString(this, hourOfDay, minute));
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Settings.setActive(this, isChecked);
     }
 }
