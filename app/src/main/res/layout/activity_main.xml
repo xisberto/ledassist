@@ -63,7 +63,7 @@
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="?android:dividerHorizontal"
         android:layout_below="@+id/buttonStart"
         android:layout_marginTop="4dp"
