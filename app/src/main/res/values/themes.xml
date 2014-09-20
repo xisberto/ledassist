@@ -7,4 +7,14 @@
     <style name="AppTheme.ActionbarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/apptheme_color</item>
     </style>
+
+    <style name="AppTheme.BetterPickerTheme" parent="BetterPickersDialogFragment.Light">
+        <item name="bpKeyBackground">@drawable/apptheme_list_selector_holo_light</item>
+        <item name="bpButtonBackground">@drawable/apptheme_list_selector_holo_light</item>
+        <item name="bpDividerColor">@color/apptheme_color</item>
+        <item name="bpTitleDividerColor">@color/apptheme_color</item>
+        <item name="bpKeyboardIndicatorColor">@color/apptheme_color</item>
+
+    </style>
+
 </resources>

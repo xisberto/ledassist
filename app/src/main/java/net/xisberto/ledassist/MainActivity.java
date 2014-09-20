@@ -3,6 +3,7 @@ package net.xisberto.ledassist;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +13,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TimePicker;
 
+import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
+import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+
 import java.util.Set;
 
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
     private CheckBox checkLed;
 
@@ -70,18 +74,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
         } else {
             key = Settings.KEY_END;
         }
-        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Settings.setTime(MainActivity.this, key, hourOfDay, minute);
-                target.setText(Settings.getTimeString(MainActivity.this, hourOfDay, minute));
-            }
-        };
         int hour = Settings.getHour(this, key);
         int minute = Settings.getMinute(this, key);
-        TimePickerDialog dialog = new TimePickerDialog(this, listener, hour, minute,
+
+
+        RadialTimePickerDialog.OnTimeSetListener callback = new RadialTimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
+                Settings.setTime(MainActivity.this, key, hourOfDay, minute);
+                target.setText(Settings.getTimeString(MainActivity.this, hourOfDay, minute));
+
+            }
+        };
+        RadialTimePickerDialog dialog = RadialTimePickerDialog.newInstance(callback, hour, minute,
                 DateFormat.is24HourFormat(this));
-        dialog.setCancelable(true);
-        dialog.show();
+        dialog.show(getSupportFragmentManager(), "");
     }
 }
