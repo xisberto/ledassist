@@ -1,7 +1,5 @@
 package net.xisberto.ledassist;
 
-import android.app.Activity;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
@@ -11,22 +9,30 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TimePicker;
 
 import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 
-import java.util.Set;
 
-
-public class MainActivity extends FragmentActivity implements View.OnClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener, RadialTimePickerDialog.OnTimeSetListener {
+    private static final String KEY = "key", TARGET = "target", TAG_RADIAL_PICKER = "radial_picker";
 
     private CheckBox checkLed;
+    private String mPreferencesKey;
+    private int mTargetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(KEY)
+                    && savedInstanceState.containsKey(TARGET)) {
+                mPreferencesKey = savedInstanceState.getString(KEY);
+                mTargetButton = savedInstanceState.getInt(TARGET);
+            }
+        }
 
         checkLed = (CheckBox) findViewById(R.id.checkLed);
         findViewById(R.id.textSummary).setOnTouchListener(new View.OnTouchListener() {
@@ -44,6 +50,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         Button buttonEnd = (Button) findViewById(R.id.buttonEnd);
         buttonEnd.setOnClickListener(this);
         buttonEnd.setText(Settings.getTimeString(this, Settings.KEY_END));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        RadialTimePickerDialog dialog = (RadialTimePickerDialog) getSupportFragmentManager()
+                .findFragmentByTag(TAG_RADIAL_PICKER);
+        if (dialog != null) {
+            dialog.setOnTimeSetListener(this);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY, mPreferencesKey);
+        outState.putInt(TARGET, mTargetButton);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -67,27 +91,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        final String key;
-        final Button target = (Button) v;
+        mTargetButton = v.getId();
         if (v.getId() == R.id.buttonStart) {
-            key = Settings.KEY_START;
+            mPreferencesKey = Settings.KEY_START;
         } else {
-            key = Settings.KEY_END;
+            mPreferencesKey = Settings.KEY_END;
         }
-        int hour = Settings.getHour(this, key);
-        int minute = Settings.getMinute(this, key);
 
+        int hour = Settings.getHour(this, mPreferencesKey);
+        int minute = Settings.getMinute(this, mPreferencesKey);
 
-        RadialTimePickerDialog.OnTimeSetListener callback = new RadialTimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
-                Settings.setTime(MainActivity.this, key, hourOfDay, minute);
-                target.setText(Settings.getTimeString(MainActivity.this, hourOfDay, minute));
-
-            }
-        };
-        RadialTimePickerDialog dialog = RadialTimePickerDialog.newInstance(callback, hour, minute,
+        RadialTimePickerDialog dialog = RadialTimePickerDialog.newInstance(this, hour, minute,
                 DateFormat.is24HourFormat(this));
-        dialog.show(getSupportFragmentManager(), "");
+        dialog.show(getSupportFragmentManager(), TAG_RADIAL_PICKER);
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
+        Button button = (Button) findViewById(mTargetButton);
+        Settings.setTime(this, mPreferencesKey, hourOfDay, minute);
+        button.setText(Settings.getTimeString(this, hourOfDay, minute));
     }
 }
