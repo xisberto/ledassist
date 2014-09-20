@@ -76,8 +76,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         checkLed.setOnCheckedChangeListener(this);
 
         TextView textStatus = (TextView) findViewById(R.id.textStatus);
-        String status = getString(Settings.isLedEnabled(this) ? R.string.enabled : R.string.disabled);
-        textStatus.setText(getString(R.string.current_led_status, status));
+        boolean status = Settings.isLedEnabled(this);
+        String str_status = getString(status ? R.string.enabled : R.string.disabled);
+        textStatus.setText(getString(R.string.current_led_status, str_status));
+        textStatus.setCompoundDrawablesWithIntrinsicBounds(
+                status ? R.drawable.ic_led_on : R.drawable.ic_led_off,
+                0, 0, 0);
     }
 
     @Override

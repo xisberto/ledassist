@@ -10,4 +10,5 @@
     <string name="current_led_status">Current led status: %s</string>
     <string name="enabled">enabled</string>
     <string name="disabled">disabled</string>
+    <string name="led_disabled">Notification led disabled</string>
 </resources>

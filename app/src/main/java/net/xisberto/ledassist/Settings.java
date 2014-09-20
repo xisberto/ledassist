@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 
-import java.lang.ref.SoftReference;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -26,6 +25,12 @@ public class Settings {
         PreferenceManager.getDefaultSharedPreferences(context).edit()
                 .putBoolean(KEY_ACTIVE, active)
                 .apply();
+        if (active) {
+            Scheduler.startSchedule(context);
+        } else {
+            setLedEnabled(context, false);
+            Scheduler.cancelSchedule(context);
+        }
     }
 
     public static boolean isLedEnabled(Context context) {
@@ -34,6 +39,7 @@ public class Settings {
     }
 
     public static void setLedEnabled(Context context, boolean enabled) {
+        Log.d("Settings", String.format("setLedEnabled: %b", enabled));
         android.provider.Settings.System.putInt(context.getContentResolver(),
                 "notification_light_pulse", enabled ? 1: 0);
     }
@@ -53,13 +59,17 @@ public class Settings {
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Log.d("Settings", String.format("_\ntime for %s\n %d %s", key,
+                calendar.getTimeInMillis(),
+                DateFormat.format("yyyy-MM-dd HH:mm", calendar)));
         return calendar;
     }
 
     public static String getTimeString(Context context, String key) {
         Calendar calendar = getTime(context, key);
         if (DateFormat.is24HourFormat(context)) {
-            return DateFormat.format("kk:mm", calendar).toString();
+            return DateFormat.format("HH:mm", calendar).toString();
         } else {
             return DateFormat.format("hh:mm aa", calendar).toString();
         }
