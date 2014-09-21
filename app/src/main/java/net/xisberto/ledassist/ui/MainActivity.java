@@ -1,9 +1,12 @@
-package net.xisberto.ledassist;
+package net.xisberto.ledassist.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
@@ -12,20 +15,26 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 
+import net.xisberto.ledassist.R;
+import net.xisberto.ledassist.control.Scheduler;
+import net.xisberto.ledassist.control.Settings;
+
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener,
-        RadialTimePickerDialog.OnTimeSetListener, SharedPreferences.OnSharedPreferenceChangeListener {
+        RadialTimePickerDialog.OnTimeSetListener, SharedPreferences.OnSharedPreferenceChangeListener, FragmentManager.OnBackStackChangedListener {
 
     private static final String KEY = "key", TARGET = "target", TAG_RADIAL_PICKER = "radial_picker";
 
     private CheckBox checkLed;
     private String mPreferencesKey;
     private int mTargetButton;
+    private FeedbackFragment feedbackFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         checkLed = (CheckBox) findViewById(R.id.checkLed);
+        checkLed.setOnClickListener(this);
         findViewById(R.id.textSummary).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -56,6 +66,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         Button buttonEnd = (Button) findViewById(R.id.buttonEnd);
         buttonEnd.setOnClickListener(this);
         buttonEnd.setText(Settings.getTimeString(this, Settings.KEY_END));
+
+        findViewById(R.id.buttonFeedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (feedbackFragment == null) {
+                    feedbackFragment = new FeedbackFragment();
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down,
+                                R.anim.slide_in_up, R.anim.slide_out_down)
+                        .replace(R.id.frame_feedback, feedbackFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -69,6 +96,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
 
+        //TODO restore actionbar status
+
         RadialTimePickerDialog dialog = (RadialTimePickerDialog) getSupportFragmentManager()
                 .findFragmentByTag(TAG_RADIAL_PICKER);
         if (dialog != null) {
@@ -79,7 +108,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 .registerOnSharedPreferenceChangeListener(this);
 
         checkLed.setChecked(Settings.isActive(this));
-        checkLed.setOnClickListener(this);
 
         TextView textStatus = (TextView) findViewById(R.id.textStatus);
         boolean status = Settings.isLedEnabled(this);
@@ -110,6 +138,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if (id == android.R.id.home) {
+            getSupportFragmentManager()
+                    .popBackStack();
+            return true;
+        }
         if (id == R.id.action_settings) {
             return true;
         }
@@ -151,6 +184,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             if (Settings.isActive(this)) {
                 Scheduler.startSchedule(this);
             }
+        }
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (feedbackFragment != null
+                && feedbackFragment.isVisible()) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+            getActionBar().setHomeButtonEnabled(false);
+            feedbackFragment = null;
         }
     }
 }

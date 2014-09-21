@@ -5,79 +5,95 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
     <CheckBox
+        android:id="@+id/checkLed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/disable_led"
-        android:id="@+id/checkLed"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/disable_led"
+        android:textAppearance="?android:textAppearanceLarge" />
 
     <TextView
+        android:id="@+id/textSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/led_summary"
-        android:id="@+id/textSummary"
-        android:layout_below="@+id/checkLed"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/checkLed"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="34dp"
+        android:layout_marginStart="34dp"
+        android:text="@string/led_summary"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
+        android:id="@+id/buttonStart"
         style="?android:attr/spinnerStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_hour"
-        android:id="@+id/buttonStart"
         android:layout_below="@+id/textSummary"
         android:layout_toLeftOf="@+id/view"
-        android:layout_toStartOf="@+id/view" />
+        android:layout_toStartOf="@+id/view"
+        android:text="@string/default_hour" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="16dp"
         android:layout_height="2dp"
-        android:layout_margin="4dp"
-        android:background="#808080"
-        android:layout_centerHorizontal="true"
         android:layout_alignBaseline="@id/buttonStart"
-        android:id="@+id/view" />
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"
+        android:background="#808080" />
 
     <Button
+        android:id="@+id/buttonEnd"
         style="?android:attr/spinnerStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_hour"
-        android:id="@+id/buttonEnd"
         android:layout_below="@+id/textSummary"
+        android:layout_toEndOf="@+id/view"
         android:layout_toRightOf="@+id/view"
-        android:layout_toEndOf="@+id/view" />
+        android:text="@string/default_hour" />
 
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:dividerHorizontal"
         android:layout_below="@+id/buttonStart"
         android:layout_marginTop="4dp"
-        />
+        android:background="?android:dividerHorizontal" />
 
     <TextView
         android:id="@+id/textStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/separator"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:gravity="center_vertical"
         android:drawableLeft="@drawable/ic_led_on"
         android:drawableStart="@drawable/ic_led_on"
-        android:text="@string/current_led_status"/>
+        android:gravity="center_vertical"
+        android:text="@string/current_led_status"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/buttonFeedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        style="?android:buttonBarButtonStyle"
+        android:paddingEnd="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingStart="4dp"
+        android:text="@string/help_feedback" />
+
+    <FrameLayout
+        android:id="@+id/frame_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </RelativeLayout>

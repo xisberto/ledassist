@@ -1,4 +1,4 @@
-package net.xisberto.ledassist;
+package net.xisberto.ledassist.control;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -70,7 +70,7 @@ public class Settings {
     public static String getTimeString(Context context, String key) {
         Calendar calendar = getTime(context, key);
         if (DateFormat.is24HourFormat(context)) {
-            return DateFormat.format("HH:mm", calendar).toString();
+            return DateFormat.format("kk:mm", calendar).toString();
         } else {
             return DateFormat.format("hh:mm aa", calendar).toString();
         }

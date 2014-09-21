@@ -8,7 +8,12 @@
     <string name="led_summary">Disable the notification led between the times selected below</string>
     <string name="default_hour">01:00</string>
     <string name="current_led_status">Current led status: %s</string>
+    <string name="help_feedback">Help and feedback</string>
     <string name="enabled">enabled</string>
     <string name="disabled">disabled</string>
     <string name="led_disabled">Notification led disabled</string>
+
+    <string name="send">Send</string>
+    <string name="feedback_intro">If this app doesn\'t work on your device, you can inform me about this and I\'ll try to correct on the next update.\nThe information below will be sent to me:</string>
+    <string name="device_info">Device information:\n·manufacturer: %1$s\n·model: %2$s\n·android version: %3$s</string>
 </resources>

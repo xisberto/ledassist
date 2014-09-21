@@ -2,6 +2,7 @@
 <resources>
     <style name="AppTheme.Default" parent="AppTheme">
         <item name="android:actionBarStyle">@style/AppTheme.ActionbarStyle</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
     <style name="AppTheme.ActionbarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">

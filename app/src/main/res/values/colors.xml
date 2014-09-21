@@ -2,4 +2,6 @@
 <resources>
     <!-- Changes the blue color for the RadialTimePickerDialog -->
     <color name="blue">@color/apptheme_color</color>
+
+    <color name="windowBackground">#efefef</color>
 </resources>

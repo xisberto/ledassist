@@ -1,10 +1,12 @@
-package net.xisberto.ledassist;
+package net.xisberto.ledassist.control;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+
+import net.xisberto.ledassist.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

@@ -1,4 +1,4 @@
-package net.xisberto.ledassist;
+package net.xisberto.ledassist.control;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,7 +8,6 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.util.Calendar;
-import java.util.Set;
 
 /**
  * Created by xisberto on 20/09/14.
