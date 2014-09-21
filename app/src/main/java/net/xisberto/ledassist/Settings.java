@@ -16,19 +16,23 @@ public class Settings {
             DEFAULT_HOUR = "01:00";
     private static final String HOUR = "_hour", MINUTE = "_minute";
 
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+    }
+
     public static boolean isActive(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
+        return getSharedPreferences(context)
                 .getBoolean(KEY_ACTIVE, false);
     }
 
     public static void setActive(Context context, boolean active) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit()
+        getSharedPreferences(context).edit()
                 .putBoolean(KEY_ACTIVE, active)
                 .apply();
         if (active) {
             Scheduler.startSchedule(context);
         } else {
-            setLedEnabled(context, false);
+            setLedEnabled(context, true);
             Scheduler.cancelSchedule(context);
         }
     }
@@ -45,14 +49,14 @@ public class Settings {
     }
 
     public static void setTime(Context context, String key, int hour, int minute) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit()
+        getSharedPreferences(context).edit()
                 .putInt(key + HOUR, hour)
                 .putInt(key + MINUTE, minute)
                 .apply();
     }
 
     public static Calendar getTime(Context context, String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences preferences = getSharedPreferences(context);
         int hourOfDay = preferences.getInt(key + HOUR, 1);
         int minute = preferences.getInt(key + MINUTE, 0);
         Calendar calendar = Calendar.getInstance();
@@ -60,9 +64,6 @@ public class Settings {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        Log.d("Settings", String.format("_\ntime for %s\n %d %s", key,
-                calendar.getTimeInMillis(),
-                DateFormat.format("yyyy-MM-dd HH:mm", calendar)));
         return calendar;
     }
 
@@ -88,12 +89,12 @@ public class Settings {
     }
 
     public static int getHour(Context context, String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getInt(key + HOUR, 1);
+        return getSharedPreferences(context)
+                .getInt(key + HOUR, 1);
     }
 
     public static int getMinute(Context context, String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getInt(key + MINUTE, 0);
+        return getSharedPreferences(context)
+                .getInt(key + MINUTE, 0);
     }
 }
