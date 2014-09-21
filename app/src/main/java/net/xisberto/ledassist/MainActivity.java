@@ -1,15 +1,17 @@
 package net.xisberto.ledassist;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
@@ -17,7 +19,7 @@ import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener,
-        RadialTimePickerDialog.OnTimeSetListener, CompoundButton.OnCheckedChangeListener {
+        RadialTimePickerDialog.OnTimeSetListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String KEY = "key", TARGET = "target", TAG_RADIAL_PICKER = "radial_picker";
 
@@ -59,7 +61,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onPause() {
         super.onPause();
-        checkLed.setOnCheckedChangeListener(null);
+        PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext())
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -72,8 +75,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             dialog.setOnTimeSetListener(this);
         }
 
+        PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext())
+                .registerOnSharedPreferenceChangeListener(this);
+
         checkLed.setChecked(Settings.isActive(this));
-        checkLed.setOnCheckedChangeListener(this);
+        checkLed.setOnClickListener(this);
 
         TextView textStatus = (TextView) findViewById(R.id.textStatus);
         boolean status = Settings.isLedEnabled(this);
@@ -112,19 +118,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        mTargetButton = v.getId();
-        if (v.getId() == R.id.buttonStart) {
-            mPreferencesKey = Settings.KEY_START;
+        if (v.getId() == R.id.checkLed) {
+            Log.d("MainActivity", String.format("checkLed is %b", checkLed.isChecked()));
+            Settings.setActive(this, checkLed.isChecked());
         } else {
-            mPreferencesKey = Settings.KEY_END;
+            mTargetButton = v.getId();
+            if (v.getId() == R.id.buttonStart) {
+                mPreferencesKey = Settings.KEY_START;
+            } else {
+                mPreferencesKey = Settings.KEY_END;
+            }
+
+            int hour = Settings.getHour(this, mPreferencesKey);
+            int minute = Settings.getMinute(this, mPreferencesKey);
+
+            RadialTimePickerDialog dialog = RadialTimePickerDialog.newInstance(this, hour, minute,
+                    DateFormat.is24HourFormat(this));
+            dialog.show(getSupportFragmentManager(), TAG_RADIAL_PICKER);
         }
-
-        int hour = Settings.getHour(this, mPreferencesKey);
-        int minute = Settings.getMinute(this, mPreferencesKey);
-
-        RadialTimePickerDialog dialog = RadialTimePickerDialog.newInstance(this, hour, minute,
-                DateFormat.is24HourFormat(this));
-        dialog.show(getSupportFragmentManager(), TAG_RADIAL_PICKER);
     }
 
     @Override
@@ -135,7 +146,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Settings.setActive(this, isChecked);
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(Settings.KEY_START) || key.equals(Settings.KEY_END)) {
+            if (Settings.isActive(this)) {
+                Scheduler.startSchedule(this);
+            }
+        }
     }
 }
