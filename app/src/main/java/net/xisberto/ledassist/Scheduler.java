@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Set;
@@ -15,9 +17,17 @@ public class Scheduler {
     private static final int REQUEST_START = 1,
             REQUEST_END = 2;
 
+    private static void logTime(Calendar calendar, String key) {
+        Log.d("Settings", String.format("_\ntime for %s\n %d %s", key,
+                calendar.getTimeInMillis(),
+                DateFormat.format("yyyy-MM-dd HH:mm", calendar)));
+    }
+
     public static void startSchedule(Context context) {
         Calendar startTime = Settings.getTime(context, Settings.KEY_START);
+        logTime(startTime, Settings.KEY_START);
         Calendar endTime = Settings.getTime(context, Settings.KEY_END);
+        logTime(endTime, Settings.KEY_END);
 
         PendingIntent alarmStart = getPendingIntent(context, REQUEST_START);
         PendingIntent alarmEnd = getPendingIntent(context, REQUEST_END);
