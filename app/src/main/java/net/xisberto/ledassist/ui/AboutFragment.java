@@ -2,7 +2,10 @@ package net.xisberto.ledassist.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,13 +40,23 @@ public class AboutFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_feedback, container, false);
+        mView = inflater.inflate(R.layout.fragment_about, container, false);
 
-/*
         TextView textDeviceInfo = (TextView) mView.findViewById(R.id.textDeviceInfo);
-        String info = getString(R.string.device_info, Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE);
+        final String info = getString(R.string.device_info, Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE);
         textDeviceInfo.setText(info);
-*/
+
+        mView.findViewById(R.id.buttonSend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent email = new Intent(Intent.ACTION_SENDTO)
+                        .setData(Uri.parse("mailto:"))
+                        .putExtra(Intent.EXTRA_EMAIL, new String[] {"xisberto+ledassist@gmail.com"})
+                        .putExtra(Intent.EXTRA_SUBJECT, "Led Assist doesn't work")
+                        .putExtra(Intent.EXTRA_TEXT, info);
+                startActivity(Intent.createChooser(email, getString(R.string.send)));
+            }
+        });
 
         return mView;
     }
