@@ -1,8 +1,8 @@
 package net.xisberto.ledassist.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,13 +52,19 @@ public class AboutFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        activity.getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = activity.getActionBar();
+        if (actionBar != null) {
+            activity.getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        getActivity().getActionBar().setHomeButtonEnabled(false);
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+        ActionBar actionBar = getActivity().getActionBar();
+        if (actionBar != null) {
+            getActivity().getActionBar().setHomeButtonEnabled(false);
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 }
