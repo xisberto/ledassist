@@ -8,12 +8,8 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-/**
- * Created by xisberto on 18/09/14.
- */
 public class Settings {
-    public static final String KEY_START = "start", KEY_END = "end", KEY_ACTIVE = "active",
-            DEFAULT_HOUR = "01:00";
+    public static final String KEY_START = "start", KEY_END = "end", KEY_ACTIVE = "active";
     private static final String HOUR = "_hour", MINUTE = "_minute";
 
     private static SharedPreferences getSharedPreferences(Context context) {
@@ -34,6 +30,7 @@ public class Settings {
         } else {
             setLedEnabled(context, true);
             Scheduler.cancelSchedule(context);
+            AlarmReceiver.cancelNotification(context);
         }
     }
 

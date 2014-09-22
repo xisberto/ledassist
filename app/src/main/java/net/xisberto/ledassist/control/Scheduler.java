@@ -9,9 +9,6 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-/**
- * Created by xisberto on 20/09/14.
- */
 public class Scheduler {
     private static final int REQUEST_START = 1,
             REQUEST_END = 2;
@@ -51,8 +48,7 @@ public class Scheduler {
         } else {
             intent.setAction(AlarmReceiver.ACTION_ENABLE_LED);
         }
-        PendingIntent result = PendingIntent.getBroadcast(context, request, intent,
+        return PendingIntent.getBroadcast(context, request, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        return result;
     }
 }

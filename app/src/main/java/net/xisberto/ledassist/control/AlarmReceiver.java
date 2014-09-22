@@ -28,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         nm.notify(NOTIFICATION_ID, builder.build());
     }
 
-    private void cancelNotification(Context context) {
+    public static void cancelNotification(Context context) {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancel(NOTIFICATION_ID);
     }
