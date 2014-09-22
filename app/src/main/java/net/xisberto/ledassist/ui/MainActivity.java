@@ -180,7 +180,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(Settings.KEY_START) || key.equals(Settings.KEY_END)) {
+        if (key.startsWith(Settings.KEY_START) || key.startsWith(Settings.KEY_END)) {
             if (Settings.isActive(this)) {
                 Scheduler.startSchedule(this);
             }
