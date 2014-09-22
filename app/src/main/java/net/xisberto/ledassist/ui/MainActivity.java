@@ -1,10 +1,8 @@
 package net.xisberto.ledassist.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
@@ -15,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
@@ -27,14 +24,14 @@ import net.xisberto.ledassist.control.Settings;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener,
-        RadialTimePickerDialog.OnTimeSetListener, SharedPreferences.OnSharedPreferenceChangeListener, FragmentManager.OnBackStackChangedListener {
+        RadialTimePickerDialog.OnTimeSetListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String KEY = "key", TARGET = "target", TAG_RADIAL_PICKER = "radial_picker";
 
     private CheckBox checkLed;
     private String mPreferencesKey;
     private int mTargetButton;
-    private FeedbackFragment feedbackFragment;
+    private AboutFragment aboutFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +67,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         findViewById(R.id.buttonFeedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (feedbackFragment == null) {
-                    feedbackFragment = new FeedbackFragment();
+                if (aboutFragment == null) {
+                    aboutFragment = new AboutFragment();
                 }
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down,
                                 R.anim.slide_in_up, R.anim.slide_out_down)
-                        .replace(R.id.frame_feedback, feedbackFragment)
+                        .replace(R.id.frame_feedback, aboutFragment)
                         .addToBackStack(null)
                         .commit();
             }
         });
 
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -96,13 +92,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
 
-        //TODO restore actionbar status
-
         RadialTimePickerDialog dialog = (RadialTimePickerDialog) getSupportFragmentManager()
                 .findFragmentByTag(TAG_RADIAL_PICKER);
         if (dialog != null) {
             dialog.setOnTimeSetListener(this);
         }
+
+        aboutFragment = (AboutFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.frame_feedback);
 
         PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext())
                 .registerOnSharedPreferenceChangeListener(this);
@@ -184,18 +181,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             if (Settings.isActive(this)) {
                 Scheduler.startSchedule(this);
             }
-        }
-    }
-
-    @Override
-    public void onBackStackChanged() {
-        if (feedbackFragment != null
-                && feedbackFragment.isVisible()) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
-            getActionBar().setHomeButtonEnabled(false);
-            feedbackFragment = null;
         }
     }
 }

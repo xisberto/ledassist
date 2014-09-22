@@ -74,7 +74,7 @@
         android:layout_below="@+id/separator"
         android:drawableLeft="@drawable/ic_led_on"
         android:drawableStart="@drawable/ic_led_on"
-        android:gravity="center_vertical"
+        android:gravity="start|center_vertical"
         android:text="@string/current_led_status"
         android:textAppearance="?android:textAppearanceMedium" />
 
