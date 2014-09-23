@@ -21,8 +21,13 @@ public class Scheduler {
 
     public static void startSchedule(Context context) {
         Calendar startTime = Settings.getTime(context, Settings.KEY_START);
-        logTime(startTime, Settings.KEY_START);
         Calendar endTime = Settings.getTime(context, Settings.KEY_END);
+
+        if (Calendar.getInstance().before(endTime)
+                && endTime.before(startTime)) {
+            startTime.add(Calendar.DAY_OF_MONTH, -1);
+        }
+        logTime(startTime, Settings.KEY_START);
         logTime(endTime, Settings.KEY_END);
 
         PendingIntent alarmStart = getPendingIntent(context, REQUEST_START);
