@@ -1,12 +1,14 @@
 package net.xisberto.ledassist.control;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import net.xisberto.ledassist.R;
+import net.xisberto.ledassist.ui.MainActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -22,6 +24,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setAutoCancel(false)
                 .setOngoing(true)
+                .setContentIntent(PendingIntent.getActivity(
+                        context, NOTIFICATION_ID,
+                        new Intent(context, MainActivity.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                ))
                 .setTicker(context.getString(R.string.led_disabled))
                 .setContentTitle(context.getString(R.string.led_disabled))
                 .setSmallIcon(R.drawable.ic_stat_notification_led);
@@ -44,5 +51,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             Settings.setLedEnabled(context, true);
             cancelNotification(context);
         }
+        //TODO broadcast to update MainActivity
+        //TODO add boot receiver
     }
 }
