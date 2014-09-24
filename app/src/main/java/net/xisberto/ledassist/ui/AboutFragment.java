@@ -2,9 +2,7 @@ package net.xisberto.ledassist.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -49,12 +47,14 @@ public class AboutFragment extends Fragment {
         mView.findViewById(R.id.buttonSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent email = new Intent(Intent.ACTION_SENDTO)
+                // Throwing a null exception for bug reporting
+                throw new NullPointerException(info);
+                /*Intent email = new Intent(Intent.ACTION_SENDTO)
                         .setData(Uri.parse("mailto:"))
                         .putExtra(Intent.EXTRA_EMAIL, new String[] {"xisberto+ledassist@gmail.com"})
                         .putExtra(Intent.EXTRA_SUBJECT, "Led Assist doesn't work")
                         .putExtra(Intent.EXTRA_TEXT, info);
-                startActivity(Intent.createChooser(email, getString(R.string.send)));
+                startActivity(Intent.createChooser(email, getString(R.string.send)));*/
             }
         });
 
@@ -69,6 +69,11 @@ public class AboutFragment extends Fragment {
         if (actionBar != null) {
             activity.getActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        prepareLicensesInformation();
+    }
+
+    private void prepareLicensesInformation() {
     }
 
     @Override
