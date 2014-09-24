@@ -19,6 +19,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     public AlarmReceiver() {
     }
 
+    public static void cancelNotification(Context context) {
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancel(NOTIFICATION_ID);
+    }
+
     private void notifyLedDisabled(Context context) {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -31,13 +36,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 ))
                 .setTicker(context.getString(R.string.led_disabled))
                 .setContentTitle(context.getString(R.string.led_disabled))
-                .setSmallIcon(R.drawable.ic_stat_notification_led);
+                .setSmallIcon(R.drawable.ic_stat_led_off);
         nm.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    public static void cancelNotification(Context context) {
-        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(NOTIFICATION_ID);
     }
 
     @Override
