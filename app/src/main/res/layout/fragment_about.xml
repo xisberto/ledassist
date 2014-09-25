@@ -43,4 +43,6 @@
         android:id="@+id/list"
         android:layout_weight="1" />
 
+    <!-- TODO add license to source code -->
+
 </LinearLayout>

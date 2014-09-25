@@ -5,7 +5,7 @@
 
     <string name="disable_led">Disable notification led</string>
     <string name="led_summary">Disable the notification led between the times selected below</string>
-    <string name="default_hour">01:00</string>
+    <string name="default_hour" translatable="false">01:00</string>
     <string name="current_led_status">Current led status: %s</string>
     <string name="enabled">enabled</string>
     <string name="disabled">disabled</string>
@@ -15,7 +15,6 @@
     <string name="version">Led Assist, version %s</string>
     <string name="copyright">Copyright © 2014 Humberto Fraga\n
         Licensed under the Apache 2.0 license</string>
-    <string name="licenses_information">Licenses information</string>
 
     <string-array name="library_names">
         <item>Nine Old Androids 2.4.0 by Jake Wharton</item>
@@ -23,8 +22,8 @@
     </string-array>
 
     <string-array name="library_versions">
-        <item>licensed under the Apache 2.0 license</item>
-        <item>licensed under the Apache 2.0 license</item>
+        <item>Licensed under the Apache 2.0 license</item>
+        <item>Licensed under the Apache 2.0 license</item>
     </string-array>
 
 </resources>
