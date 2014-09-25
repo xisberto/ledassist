@@ -1,9 +1,14 @@
 package net.xisberto.ledassist.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
@@ -31,6 +36,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private int mTargetButton;
     private AboutFragment aboutFragment;
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Settings.ACTION_LED_ENABLED.equals(intent.getAction())
+                    && intent.hasExtra(Settings.EXTRA_LED_STATUS))
+            updateLayout(intent.getBooleanExtra(Settings.EXTRA_LED_STATUS, true));
+        }
+    };
+
+    private void updateLayout(boolean led_enabled) {
+        TextView textStatus = (TextView) findViewById(R.id.textStatus);
+        String str_status = getString(led_enabled ? R.string.enabled : R.string.disabled);
+        textStatus.setText(getString(R.string.current_led_status, str_status));
+        textStatus.setCompoundDrawablesWithIntrinsicBounds(
+                led_enabled ? R.drawable.ic_led_on : R.drawable.ic_led_off,
+                0, 0, 0);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +68,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
 
         checkLed = (CheckBox) findViewById(R.id.checkLed);
+        checkLed.setChecked(Settings.isActive(this));
         checkLed.setOnClickListener(this);
         findViewById(R.id.textSummary).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -84,6 +108,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onPause();
         PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext())
                 .unregisterOnSharedPreferenceChangeListener(this);
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(receiver);
     }
 
     @Override
@@ -99,18 +125,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         aboutFragment = (AboutFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_feedback);
 
+        updateLayout(Settings.isLedEnabled(this));
+
         PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext())
                 .registerOnSharedPreferenceChangeListener(this);
 
-        checkLed.setChecked(Settings.isActive(this));
-
-        TextView textStatus = (TextView) findViewById(R.id.textStatus);
-        boolean status = Settings.isLedEnabled(this);
-        String str_status = getString(status ? R.string.enabled : R.string.disabled);
-        textStatus.setText(getString(R.string.current_led_status, str_status));
-        textStatus.setCompoundDrawablesWithIntrinsicBounds(
-                status ? R.drawable.ic_led_on : R.drawable.ic_led_off,
-                0, 0, 0);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(receiver, new IntentFilter(Settings.ACTION_LED_ENABLED));
     }
 
     @Override

@@ -1,15 +1,19 @@
 package net.xisberto.ledassist.control;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.util.Calendar;
 
 public class Settings {
-    public static final String KEY_START = "start", KEY_END = "end", KEY_ACTIVE = "active";
+    public static final String KEY_START = "start", KEY_END = "end", KEY_ACTIVE = "active",
+            ACTION_LED_ENABLED = "net.xisberto.ledassist.LED_ENABLED",
+            EXTRA_LED_STATUS = "LED_STATUS";
     private static final String HOUR = "_hour", MINUTE = "_minute";
 
     private static SharedPreferences getSharedPreferences(Context context) {
@@ -42,7 +46,10 @@ public class Settings {
     public static void setLedEnabled(Context context, boolean enabled) {
         Log.d("Settings", String.format("setLedEnabled: %b", enabled));
         android.provider.Settings.System.putInt(context.getContentResolver(),
-                "notification_light_pulse", enabled ? 1: 0);
+                "notification_light_pulse", enabled ? 1 : 0);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(new Intent(ACTION_LED_ENABLED)
+                        .putExtra(EXTRA_LED_STATUS, enabled));
     }
 
     public static void setTime(Context context, String key, int hour, int minute) {
