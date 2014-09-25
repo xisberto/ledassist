@@ -8,6 +8,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import net.xisberto.ledassist.ui.Notification;
+
 import java.util.Calendar;
 
 public class Settings {
@@ -30,11 +32,17 @@ public class Settings {
                 .putBoolean(KEY_ACTIVE, active)
                 .apply();
         if (active) {
-            Scheduler.startSchedule(context);
+            if (Calendar.getInstance().after(getTime(context, KEY_START))
+                || Calendar.getInstance().before(getTime(context, KEY_END))) {
+                    setLedEnabled(context, false);
+                    Scheduler.scheduleEnd(context);
+            } else {
+                setLedEnabled(context, true);
+                Scheduler.scheduleStart(context);
+            }
         } else {
             setLedEnabled(context, true);
             Scheduler.cancelSchedule(context);
-            AlarmReceiver.cancelNotification(context);
         }
     }
 
@@ -47,6 +55,11 @@ public class Settings {
         Log.d("Settings", String.format("setLedEnabled: %b", enabled));
         android.provider.Settings.System.putInt(context.getContentResolver(),
                 "notification_light_pulse", enabled ? 1 : 0);
+        if (enabled) {
+            Notification.cancelNotification(context);
+        } else {
+            Notification.showNotification(context);
+        }
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(new Intent(ACTION_LED_ENABLED)
                         .putExtra(EXTRA_LED_STATUS, enabled));

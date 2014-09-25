@@ -4,8 +4,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.Log;
+
+import net.xisberto.ledassist.ui.Notification;
 
 import java.util.Calendar;
 
@@ -14,30 +17,45 @@ public class Scheduler {
             REQUEST_END = 2;
 
     private static void logTime(Calendar calendar, String key) {
-        Log.d("Settings", String.format("_\ntime for %s\n %d %s", key,
+        Log.d("Scheduler", String.format("_\ntime for %s\n %d %s", key,
                 calendar.getTimeInMillis(),
                 DateFormat.format("yyyy-MM-dd HH:mm", calendar)));
     }
 
-    public static void startSchedule(Context context) {
+    /**
+     * Set the alarm to start the disabled period
+     * @param context
+     */
+    public static void scheduleStart(Context context) {
         Calendar startTime = Settings.getTime(context, Settings.KEY_START);
-        Calendar endTime = Settings.getTime(context, Settings.KEY_END);
-
-        if (Calendar.getInstance().before(endTime)
-                && endTime.before(startTime)) {
-            startTime.add(Calendar.DAY_OF_MONTH, -1);
-        }
         logTime(startTime, Settings.KEY_START);
-        logTime(endTime, Settings.KEY_END);
+        setAlarm(context, startTime, REQUEST_START);
+    }
 
-        PendingIntent alarmStart = getPendingIntent(context, REQUEST_START);
-        PendingIntent alarmEnd = getPendingIntent(context, REQUEST_END);
+    /**
+     * Set the alarm to end the disabled period
+     * @param context
+     */
+    public static void scheduleEnd(Context context) {
+        Calendar endTime = Settings.getTime(context, Settings.KEY_END);
+        logTime(endTime, Settings.KEY_END);
+        setAlarm(context, endTime, REQUEST_END);
+    }
+
+    private static void setAlarm(Context context, Calendar time, int request) {
+        if (Calendar.getInstance().after(time)) {
+            //if the time is past, set the alarm to tomorrow
+            time.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        PendingIntent alarm = getPendingIntent(context, request);
 
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmStart);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, endTime.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmEnd);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+            am.setExact(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarm);
+        } else {
+            am.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), alarm);
+        }
     }
 
     public static void cancelSchedule(Context context) {

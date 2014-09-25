@@ -183,9 +183,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.startsWith(Settings.KEY_START) || key.startsWith(Settings.KEY_END)) {
-            if (Settings.isActive(this)) {
-                Scheduler.startSchedule(this);
+        if (key.startsWith(Settings.KEY_START)
+                || key.startsWith(Settings.KEY_END)) {
+            if (checkLed.isChecked()) {
+                Settings.setActive(this, true);
             }
         }
     }
