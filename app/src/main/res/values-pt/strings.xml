@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Led Assist</string>
+
+    <string name="disable_led">Desabilitar o led de notificação</string>
+    <string name="led_summary">Desabilita o led de notificação entre as horas selecionadas abaixo</string>
+    <string name="current_led_status">Estado atual do led: %s</string>
+    <string name="enabled">ligado</string>
+    <string name="disabled">desligado</string>
+    <string name="led_disabled">Led de notificação desligado</string>
+
+    <string name="about">Sobre o Led Assist</string>
+    <string name="version">Led Assist, versão %s</string>
+    <string name="copyright">Copyright © 2014 Humberto Fraga\n
+        Licenciado sob a licença Apache 2.0</string>
+
+    <string-array name="library_names">
+        <item>Nine Old Androids 2.4.0 por Jake Wharton</item>
+        <item>Better Pickers 1.5.2 por Derek Brameyer</item>
+    </string-array>
+
+    <string-array name="library_versions">
+        <item>Licenciado sob a licença Apache 2.0</item>
+        <item>Licenciado sob a licença Apache 2.0</item>
+    </string-array>
+
+</resources>
