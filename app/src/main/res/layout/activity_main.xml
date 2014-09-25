@@ -36,12 +36,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textSummary"
-        android:layout_toLeftOf="@+id/view"
-        android:layout_toStartOf="@+id/view"
+        android:layout_toLeftOf="@+id/divider"
+        android:layout_toStartOf="@+id/divider"
         android:text="@string/default_hour" />
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/divider"
         android:layout_width="16dp"
         android:layout_height="2dp"
         android:layout_alignBaseline="@id/buttonStart"
@@ -55,8 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textSummary"
-        android:layout_toEndOf="@+id/view"
-        android:layout_toRightOf="@+id/view"
+        android:layout_toEndOf="@+id/divider"
+        android:layout_toRightOf="@+id/divider"
         android:text="@string/default_hour" />
 
     <View
@@ -95,7 +95,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:paddingStart="4dp"
-        android:text="@string/help_feedback" />
+        android:text="@string/about" />
 
     <FrameLayout
         android:id="@+id/frame_feedback"

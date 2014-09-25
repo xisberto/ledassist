@@ -2,14 +2,16 @@ package net.xisberto.ledassist.ui;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import net.xisberto.ledassist.R;
@@ -34,29 +36,14 @@ public class AboutFragment extends Fragment {
 
         ((TextView)mView.findViewById(R.id.textVersion))
                 .setText(getString(R.string.version, version));
+
+        ListView list = (ListView) mView.findViewById(R.id.list);
+        list.setAdapter(new LicenseAdapter(getActivity()));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_about, container, false);
-
-        TextView textDeviceInfo = (TextView) mView.findViewById(R.id.textDeviceInfo);
-        final String info = getString(R.string.device_info, Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE);
-        textDeviceInfo.setText(info);
-
-        mView.findViewById(R.id.buttonSend).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Throwing a null exception for bug reporting
-                throw new NullPointerException(info);
-                /*Intent email = new Intent(Intent.ACTION_SENDTO)
-                        .setData(Uri.parse("mailto:"))
-                        .putExtra(Intent.EXTRA_EMAIL, new String[] {"xisberto+ledassist@gmail.com"})
-                        .putExtra(Intent.EXTRA_SUBJECT, "Led Assist doesn't work")
-                        .putExtra(Intent.EXTRA_TEXT, info);
-                startActivity(Intent.createChooser(email, getString(R.string.send)));*/
-            }
-        });
 
         return mView;
     }
@@ -83,6 +70,44 @@ public class AboutFragment extends Fragment {
         if (actionBar != null) {
             getActivity().getActionBar().setHomeButtonEnabled(false);
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    public static class LicenseAdapter extends BaseAdapter {
+        private Context mContext;
+        private String[] mLibraryNames, mLibraryVersions;
+
+        public LicenseAdapter(Context context) {
+            mContext = context;
+            mLibraryNames = mContext.getResources().getStringArray(R.array.library_names);
+            mLibraryVersions = mContext.getResources().getStringArray(R.array.library_versions);
+        }
+
+        @Override
+        public int getCount() {
+            return mLibraryNames.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mLibraryNames[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext)
+                        .inflate(android.R.layout.simple_list_item_2, parent, false);
+            }
+
+            ((TextView)convertView.findViewById(android.R.id.text1)).setText(mLibraryNames[position]);
+            ((TextView)convertView.findViewById(android.R.id.text2)).setText(mLibraryVersions[position]);
+            return convertView;
         }
     }
 }

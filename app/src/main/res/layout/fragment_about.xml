@@ -1,77 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scrollView"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/windowBackground">
 
-    <RelativeLayout
+
+    <ImageView
+        android:id="@+id/imageIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/textVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/textCopyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/copyright"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center_horizontal" />
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:layout_marginBottom="4dp"
+        android:background="?android:dividerHorizontal"
+        android:id="@+id/divider" />
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/list"
+        android:layout_weight="1" />
 
-        <ImageView
-            android:id="@+id/imageIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_launcher" />
-
-        <TextView
-            android:id="@+id/textAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageIcon"
-            android:layout_centerHorizontal="true"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/textVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textAppName"
-            android:layout_centerHorizontal="true"
-            android:text="@string/version"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/textVersion"
-            android:background="?android:dividerHorizontal" />
-
-        <TextView
-            android:id="@+id/textIntro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textVersion"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/feedback_intro"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textDeviceInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textIntro"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:text="@string/device_info" />
-
-        <Button
-            android:id="@+id/buttonSend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textDeviceInfo"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/send" />
-
-        <!-- TODO add licensing information -->
-
-    </RelativeLayout>
-</ScrollView>
+</LinearLayout>
