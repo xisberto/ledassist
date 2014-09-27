@@ -28,6 +28,9 @@
         android:text="@string/copyright"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:linksClickable="true"
+        android:autoLink="web"
+        android:textColorLink="@color/apptheme_color"
         android:layout_gravity="center_horizontal" />
 
     <View
