@@ -12,7 +12,8 @@
     <string name="about">Sobre o Led Assist</string>
     <string name="version">Led Assist, versão %s</string>
     <string name="copyright">Copyright © 2014 Humberto Fraga\n
-        Licenciado sob a licença Apache 2.0</string>
+        Licenciado sob a licença Apache 2.0\n
+        Você pode baixar o código no link https://github.com/xisberto/ledassist</string>
 
     <string-array name="library_names">
         <item>Nine Old Androids 2.4.0 por Jake Wharton</item>
